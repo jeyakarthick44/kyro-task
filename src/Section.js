@@ -1,146 +1,219 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import React, { ReactNode } from "react";
+import {
+  IconButton,
+  Avatar,
+  Box,
+  CloseButton,
+  Flex,
+  HStack,
+  VStack,
+  Icon,
+  useColorModeValue,
+  Link,
+  Drawer,
+  DrawerContent,
+  Text,
+  useDisclosure,
+  BoxProps,
+  FlexProps,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
+import {
+  FiHome,
+  FiTrendingUp,
+  FiCompass,
+  FiStar,
+  FiSettings,
+  FiMenu,
+  FiBell,
+  FiChevronDown,
+} from "react-icons/fi";
 
-const drawerWidth = 240;
+const LinkItems = [
+  { name: "Home", icon: FiHome },
+  { name: "Trending", icon: FiTrendingUp },
+  { name: "Explore", icon: FiCompass },
+  { name: "Favourites", icon: FiStar },
+  { name: "Settings", icon: FiSettings },
+];
 
-function ResponsiveDrawer(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const drawer = (
-    <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
-
+export default function SidebarWithHeader({ children }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
+    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: "none", md: "block" }}
+      />
+      <Drawer
+        autoFocus={false}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full"
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
-        <div className="center">k</div>
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
+      {/* mobilenav */}
+      <MobileNav onOpen={onOpen} />
+      <Box ml={{ base: 0, md: 60 }} p="4">
+        {children}
       </Box>
     </Box>
   );
 }
 
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
+const SidebarContent = ({ onClose, ...rest }) => {
+  return (
+    <Box
+      transition="3s ease"
+      bg={useColorModeValue("white", "gray.900")}
+      borderRight="1px"
+      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      w={{ base: "full", md: 60 }}
+      pos="fixed"
+      h="full"
+      {...rest}
+    >
+      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+          Logo
+        </Text>
+        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
+      </Flex>
+      {LinkItems.map((link) => (
+        <NavItem key={link.name} icon={link.icon}>
+          {link.name}
+        </NavItem>
+      ))}
+    </Box>
+  );
 };
 
-export default ResponsiveDrawer;
+const NavItem = ({ icon, children, ...rest }) => {
+  return (
+    <Link
+      href="#"
+      style={{ textDecoration: "none" }}
+      _focus={{ boxShadow: "none" }}
+    >
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: "cyan.400",
+          color: "white",
+        }}
+        {...rest}
+      >
+        {icon && (
+          <Icon
+            mr="4"
+            fontSize="16"
+            _groupHover={{
+              color: "white",
+            }}
+            as={icon}
+          />
+        )}
+        {children}
+      </Flex>
+    </Link>
+  );
+};
+
+const MobileNav = ({ onOpen, ...rest }) => {
+  return (
+    <Flex
+      ml={{ base: 0, md: 60 }}
+      px={{ base: 4, md: 4 }}
+      height="20"
+      alignItems="center"
+      bg={useColorModeValue("white", "gray.900")}
+      borderBottomWidth="1px"
+      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      justifyContent={{ base: "space-between", md: "flex-end" }}
+      {...rest}
+    >
+      <IconButton
+        display={{ base: "flex", md: "none" }}
+        onClick={onOpen}
+        variant="outline"
+        aria-label="open menu"
+        icon={<FiMenu />}
+      />
+
+      <Text
+        display={{ base: "flex", md: "none" }}
+        fontSize="2xl"
+        fontFamily="monospace"
+        fontWeight="bold"
+      >
+        Logo
+      </Text>
+
+      <HStack spacing={{ base: "0", md: "6" }}>
+        <IconButton
+          size="lg"
+          variant="ghost"
+          aria-label="open menu"
+          icon={<FiBell />}
+        />
+        <Flex alignItems={"center"}>
+          <Menu>
+            <MenuButton
+              py={2}
+              transition="all 0.3s"
+              _focus={{ boxShadow: "none" }}
+            >
+              <HStack>
+                <Avatar
+                  size={"sm"}
+                  src={
+                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
+                  }
+                />
+                <VStack
+                  display={{ base: "none", md: "flex" }}
+                  alignItems="flex-start"
+                  spacing="1px"
+                  ml="2"
+                >
+                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="xs" color="gray.600">
+                    Admin
+                  </Text>
+                </VStack>
+                <Box display={{ base: "none", md: "flex" }}>
+                  <FiChevronDown />
+                </Box>
+              </HStack>
+            </MenuButton>
+            <MenuList
+              bg={useColorModeValue("white", "gray.900")}
+              borderColor={useColorModeValue("gray.200", "gray.700")}
+            >
+              <MenuItem>Profile</MenuItem>
+              <MenuItem>Settings</MenuItem>
+              <MenuItem>Billing</MenuItem>
+              <MenuDivider />
+              <MenuItem>Sign out</MenuItem>
+            </MenuList>
+          </Menu>
+        </Flex>
+      </HStack>
+    </Flex>
+  );
+};
