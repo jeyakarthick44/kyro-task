@@ -1,4 +1,7 @@
 import React, { ReactNode } from "react";
+import "./styles.css";
+import Task from "./Task";
+
 import {
   IconButton,
   Avatar,
@@ -14,31 +17,27 @@ import {
   DrawerContent,
   Text,
   useDisclosure,
-  BoxProps,
-  FlexProps,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
-  FiMenu,
-  FiBell,
-  FiChevronDown,
-} from "react-icons/fi";
+import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
+import { AiOutlineSchedule } from "react-icons/ai";
+import { MdAttachMoney } from "react-icons/md";
+import { GoDashboard, GoTools } from "react-icons/go";
+import { SiReadthedocs } from "react-icons/si";
+import { FaArrowsAltH, FaWpforms } from "react-icons/fa";
 
 const LinkItems = [
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
+  { name: "Schedule Update", icon: AiOutlineSchedule },
+  { name: "Budget Meeting", icon: MdAttachMoney },
+  { name: "Dashboard", icon: GoDashboard },
+  { name: "Docs", icon: SiReadthedocs },
+  { name: "Project Change Request", icon: FaArrowsAltH },
+  { name: "Forms", icon: FaWpforms },
+  { name: "Tools", icon: GoTools },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -67,6 +66,9 @@ export default function SidebarWithHeader({ children }) {
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
+      <div className="center">
+        <Task />
+      </div>
     </Box>
   );
 }
@@ -85,7 +87,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+          KYRO
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -161,7 +163,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
         fontFamily="monospace"
         fontWeight="bold"
       >
-        Logo
+        KYRO
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
