@@ -4,7 +4,7 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "scripts": {
-    "start": "back-end index.js",
+    "start": "nodemon back-end index.js",
     "dev": "concurrently \"nodemon index\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
