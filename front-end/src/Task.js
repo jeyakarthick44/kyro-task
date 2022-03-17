@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Badge, Heading } from "@chakra-ui/react";
+import { Box, Badge, SimpleGrid, Heading } from "@chakra-ui/react";
 
 const Home = () => {
-  const [project, setProject] = useState("");
+  const [work, setWork] = useState([]);
   const fetchApi = () => {
     axios
       .get("http://localhost:5000")
       .then(function (response) {
-        console.log(response.data.data);
-        setProject(response.data.data);
+        let backEnd = response.data.Task;
+        console.log(response.data.Task);
+        setWork(backEnd);
+        console.log(work);
       })
       .catch(function (error) {
         console.log(error);
@@ -22,80 +24,71 @@ const Home = () => {
 
   return (
     <>
-      <Heading
-        as="h2"
-        size="xl"
-        isTruncated
-        style={{ textAlign: "center", marginTop: "20px" }}
+      <SimpleGrid
+        columns={[1, 2, 3]}
+        spacing={4}
+        style={{
+          margin: "20px",
+        }}
       >
-        Rental House
-      </Heading>
-      {project.map((item) => (
-        <Box
-          style={{ marginLeft: "20px", marginTop: "40px" }}
-          maxW="sm"
-          borderWidth="1px"
-          borderRadius="lg"
-          overflow="hidden"
-        >
-          {/* <Image
-            src={item.coverPhoto.url}
-            style={{ height: "270px", width: "100%" }}
-            alt="home"
-          /> */}
-          <Box p="6">
-            <Box display="flex" alignItems="baseline">
-              <Badge borderRadius="full" px="2" colorScheme="teal">
-                {item.ProjectName}
-              </Badge>
-              <Box
-                color="gray.500"
-                fontWeight="semibold"
-                letterSpacing="wide"
-                fontSize="xs"
-                textTransform="uppercase"
-                ml="2"
-              >
-                {/* {item.ProjectName} */}
-                baths
+        {work.map((item) => (
+          <Box
+            style={{
+              width: "100%",
+              backgroundColor: "rgb(255 255 255)",
+              boxShadow: "rgba(3 209 255) 0px 5px 15px",
+            }}
+            maxW="sm"
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            key={item.id}
+          >
+            <Box p={6}>
+              <Box textAlign="center">
+                <Heading color="teel" as="h5" size="sm">
+                  {item.ProjectId} - {item.ProjectName}
+                </Heading>
               </Box>
-            </Box>
+              <Box
+                textAlign="center"
+                fontWeight="semibold"
+                as="h4"
+                lineHeight="tight"
+                isTruncated
+              >
+                {item.Licenses}
+              </Box>
 
-            <Box
-              mt="1"
-              fontWeight="semibold"
-              as="h4"
-              lineHeight="tight"
-              isTruncated
-            >
-              {/* {item.ProjectName} */}
-            </Box>
-            <Box>
-              <Box as="span" color="gray.600" fontSize="sm">
-                {/* {item.price}/week */}
+              <Box as="h5" color="gray.600" fontSize="sm" textAlign="center">
+                {item.Design}
               </Box>
-            </Box>
-            <Box>
+              <Box as="h4" color="gray.600" fontSize="sm" textAlign="center">
+                {item.date}
+              </Box>
               <Box
-                mt="1"
-                fontWeight="semibold"
-                as="h4"
-                lineHeight="tight"
-                isTruncated
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                }}
               >
-                {/* {item.ProjectName} */}
+                <Box as="span" color="gray.600" fontSize="sm">
+                  <Badge borderRadius="full">{item.percentage}</Badge>
+                </Box>
+                <Box>
+                  <Box as="span" color="gray.600" fontSize="sm">
+                    <Badge borderRadius="full">Notes</Badge>
+                  </Box>
+                </Box>
+                <Box as="span" color="gray.600" fontSize="sm">
+                  <Badge borderRadius="full">{item.risk}</Badge>
+                </Box>
               </Box>
-              <span
-                mt="1"
-                fontWeight="semibold"
-                as="h4"
-                lineHeight="tight"
-                isTruncated
-              ></span>
             </Box>
           </Box>
-        </Box>
-      ))}
+        ))}
+      </SimpleGrid>
     </>
   );
 };

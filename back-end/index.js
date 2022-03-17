@@ -7,7 +7,7 @@ app.use(cors());
 let jsonFile = require("./data.json");
 
 app.get("/", function (req, res) {
-  res.json(jsonFile);
+  res.send(jsonFile);
 });
 
 app.listen(port, () => {
