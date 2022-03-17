@@ -29,6 +29,7 @@ import { MdAttachMoney } from "react-icons/md";
 import { GoDashboard, GoTools } from "react-icons/go";
 import { SiReadthedocs } from "react-icons/si";
 import { FaArrowsAltH, FaWpforms } from "react-icons/fa";
+import Filter from "./Filter";
 
 const LinkItems = [
   { name: "Schedule Update", icon: AiOutlineSchedule },
@@ -165,7 +166,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
       >
         KYRO
       </Text>
-
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
           size="lg"
@@ -173,6 +173,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
           aria-label="open menu"
           icon={<FiBell />}
         />
+
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
