@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Filter from "./Filter";
-import { Box, Badge, SimpleGrid, Heading, Button } from "@chakra-ui/react";
+import { Box, Badge, SimpleGrid, Heading } from "@chakra-ui/react";
 
 const Home = () => {
   const [work, setWork] = useState([]);
@@ -44,7 +44,7 @@ const Home = () => {
             borderWidth="1px"
             borderRadius="lg"
             overflow="hidden"
-            key={item.id}
+            key={item.ProjectId}
           >
             <Box p={6}>
               <Box textAlign="center">
@@ -92,7 +92,7 @@ const Home = () => {
               >
                 <Box as="span" color="gray.600" fontSize="sm">
                   {(() => {
-                    if (item.percentage == "100%") {
+                    if (item.percentage === "100%") {
                       return (
                         <Badge
                           colorScheme="green"

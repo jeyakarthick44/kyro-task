@@ -29,7 +29,6 @@ import { MdAttachMoney } from "react-icons/md";
 import { GoDashboard, GoTools } from "react-icons/go";
 import { SiReadthedocs } from "react-icons/si";
 import { FaArrowsAltH, FaWpforms } from "react-icons/fa";
-import Filter from "./Filter";
 
 const LinkItems = [
   { name: "Schedule Update", icon: AiOutlineSchedule },
